@@ -42,7 +42,7 @@ class SuffixTree:
             self.suffix_node.store_node(suffix)
             self.idx_suffix.append((i, suffix))
 
-    def generate_suffix_array(self) -> List[int]:
+    def generate_suffix_array_brute_force(self) -> List[int]:
         suffix_array = []
         self.idx_suffix = sorted(self.idx_suffix, key=lambda x: x[1])
         for idx, _ in self.idx_suffix:
@@ -53,12 +53,22 @@ class SuffixTree:
         suffix += "$"
         return self.suffix_node.find_suffix(suffix=suffix)
 
+    def generate_suffix_array_linearly(self):
+        new_s=self.s+"$$"
+        all_mode_one_two_substr = []
+        for i in range(self.length):
+            if i %3==0 or i%3==1:
+                all_mode_one_two_substr.append(new_s[i:i+3])
+        self.radix_sort(all_mode_one_two_substr)
+
+    def radix_sort():
+
 
 def main():
     s = "dabcde"
     st = SuffixTree(s)
     st.create_suffix_tree()
-    sa = st.generate_suffix_array()
+    sa = st.generate_suffix_array_brute_force()
     for idx in sa:
         print(idx, end="\t")
     print()
