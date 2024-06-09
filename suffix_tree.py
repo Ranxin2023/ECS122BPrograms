@@ -4,27 +4,27 @@ from typing import List
 class SuffixNode:
     def __init__(self, c: str = None) -> None:
         self.c = c
-        self.end = False
-        self.children = dict()
+        self.end = -1
+        self.children = [None] * 128
 
-    def store_node(self, s: str):
+    def store_node(self, s: str, idx: int):
         t = self
         for c in s:
 
-            if c in t.children:
-                t = t.children[c]
+            if t.children[ord(c)] != None:
+                t = t.children[ord(c)]
             else:
-                t.children[c] = SuffixNode(c)
-        t.end = True
+                t.children[ord(c)] = SuffixNode(c)
+        t.end = idx
 
     def find_suffix(self, suffix):
         t = self
         for c in suffix:
-            if c in t.children:
-                t = t.children[c]
+            if t.children[ord(c)] != None:
+                t = t.children[ord(c)]
             else:
                 return False
-        return t.end
+        return t.end == -1
 
 
 class SuffixTree:
@@ -39,7 +39,7 @@ class SuffixTree:
         for i in range(self.length):
             suffix = self.s[i:] + "$"
             suffixes.append(suffix)
-            self.suffix_node.store_node(suffix)
+            self.suffix_node.store_node(suffix, i)
             self.idx_suffix.append((i, suffix))
 
     def generate_suffix_array_brute_force(self) -> List[int]:
@@ -52,6 +52,9 @@ class SuffixTree:
     def in_tree(self, suffix):
         suffix += "$"
         return self.suffix_node.find_suffix(suffix=suffix)
+
+    def generate_suffix_array_by_suffix_tree(self):
+        pass
 
     def generate_suffix_array_linearly(self):
         new_s = self.s + "$$"
@@ -71,10 +74,7 @@ def main():
     s = "dabcde"
     st = SuffixTree(s)
     st.create_suffix_tree()
-    sa = st.generate_suffix_array_brute_force()
-    for idx in sa:
-        print(idx, end="\t")
-    print()
+    print(f"brute force sa:{st.generate_suffix_array_brute_force()}")
     print(f"Whether dab is in tree or not: {st.in_tree('dab')}")
 
 
