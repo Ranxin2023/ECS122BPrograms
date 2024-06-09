@@ -54,14 +54,17 @@ class SuffixTree:
         return self.suffix_node.find_suffix(suffix=suffix)
 
     def generate_suffix_array_linearly(self):
-        new_s=self.s+"$$"
+        new_s = self.s + "$$"
         all_mode_one_two_substr = []
         for i in range(self.length):
-            if i %3==0 or i%3==1:
-                all_mode_one_two_substr.append(new_s[i:i+3])
+            if i % 3 == 0 or i % 3 == 1:
+                all_mode_one_two_substr.append(new_s[i : i + 3])
         self.radix_sort(all_mode_one_two_substr)
 
-    def radix_sort():
+    def radix_sort(self, idx, arr):
+        if idx == 3:
+            return arr
+        radix = [[] for i in range(27)]
 
 
 def main():
